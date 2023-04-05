@@ -8,7 +8,4 @@ export default defineConfig({
             refresh: true,
         }),
     ],
-    build: {
-        outDir: path.resolve(__dirname, 'dist')
-    }
 });

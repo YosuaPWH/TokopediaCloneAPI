@@ -15,7 +15,7 @@ class UpdateProfileController extends Controller
         $user = User::where('id', $id)->first();
 
         if (!$user) {
-            return Response::error("Tidak ada user");
+            return Response::error("User tidak ditemukan");
         }
 
         $rules = [
@@ -31,13 +31,38 @@ class UpdateProfileController extends Controller
         ];
 
         $validasi = Validator::make($request->all(), $rules);
-        
         if ($validasi->fails()) {
             return Response::error($validasi->errors()->first());
         }
 
         $user->update($request->all());
         return Response::success($user);
-        
+    }
+
+
+    public function uploadImage(Request $request, $id) {
+        $user = User::where('id', $id)->first();
+
+        if ($user) {
+            // Jika ada image
+            $filename = "";
+            if ($request->image) {
+                $image = $request->image->getClientOriginalName();
+                $image = str_replace(' ', '', $image);
+                $image = date('Hs').rand(1,9999) . "_" . $image;
+                $filename = $image;
+                $request->image->storeAs('public/user', $image);
+            } else {
+                return Response::error("Image wajib dikirim");
+            }
+
+            $user->update([
+                'image' => $filename
+            ]);
+            return Response::success($user);
+        }
+
+
+        return Response::error("User tidak ditemukan");
     }
 }

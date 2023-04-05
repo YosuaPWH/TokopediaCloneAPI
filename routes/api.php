@@ -25,4 +25,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 
 Route::put('update-profile/{id}', [UpdateProfileController::class, 'updateProfile']);
+
+Route::post('upload-image/{id}', [UpdateProfileController::class, 'uploadImage']);
+
  
